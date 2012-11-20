@@ -1,4 +1,4 @@
-import os, time
+import os
 from dasbit.core import Config
 
 class Nickserv:

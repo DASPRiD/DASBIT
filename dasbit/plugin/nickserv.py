@@ -3,11 +3,11 @@ from dasbit.core import Config
 
 class Nickserv:
     help = "https://github.com/DASPRiD/DASBiT/wiki/nickserv-plugin"
-    
+
     def __init__(self, manager):
         self.client = manager.client
         self.config = Config(os.path.join(manager.dataPath, 'nickserv'))
-    
+
         manager.registerCommand('nickserv', 'register', 'nickserv-register', '(?P<password>[^ ]+) (?P<email_address>[^ ]+)', self.register)
         manager.registerCommand('nickserv', 'validate', 'nickserv-validate', '(?P<validation_code>[^ ]+)', self.validate)
         manager.registerCommand('nickserv', 'identify', 'nickserv-identify', '', self.identify)
@@ -32,22 +32,22 @@ class Nickserv:
 
     def identify(self, source):
         if not 'password' in self.config:
-            self.client.reply(source, 'Please save my password first', 'notice')
+            self.client.reply(source, 'Please save password first', 'notice')
             return
 
         if not 'nickname' in self.config:
-            self.client.reply(source, 'Please save my nickname first', 'notice')
+            self.client.reply(source, 'Please save nickname first', 'notice')
             return
 
         self.send_identify(self.config['nickname'], self.config['password'])
-        self.client.reply(source, 'I should now be identified, please check me with /whois', 'notice');
+        self.client.reply(source, 'Authenticated with services. Please verify with /whois', 'notice');
 
     def ghost(self, source):
         if not 'password' in self.config:
-            self.client.reply(source, 'Please save my password first', 'notice')
+            self.client.reply(source, 'Please set password first', 'notice')
             return
         if not 'nickname' in self.config:
-            self.client.reply(source, 'Please save my nickname first', 'notice')
+            self.client.reply(source, 'Please set nickname first', 'notice')
             return
         self.send_identify(self.config['nickname'], self.config['password'])
         self.client.sendPrivMsg('nickserv', 'ghost %s' % self.client.config['nickname'])
@@ -57,20 +57,20 @@ class Nickserv:
 
     def release(self, source):
         if not 'password' in self.config:
-            self.client.reply(source, 'Please save my password first', 'notice')
+            self.client.reply(source, 'Please set password first', 'notice')
             return
         if not 'nickname' in self.config:
-            self.client.reply(source, 'Please save my nickname first', 'notice')
+            self.client.reply(source, 'Please set nickname first', 'notice')
             return
         self.send_identify(self.config['nickname'], self.config['password'])
         self.client.sendPrivMsg('nickserv', 'release %s' % self.client.config['nickname'])
         self.client.sendPrivMsg('nickserv', 'release %s' % self.client.config['nickname'])
         self.client.send('NICK', self.client.config['nickname'], 50, 1)
-        self.client.reply(source, 'I should now be back to my old self!', 'notice')
+        self.client.reply(source, 'Nick recovered', 'notice')
 
     def protect(self, source):
         self.client.sendPrivMsg('nickserv', 'set enforce on');
-        self.client.reply(source, 'I have asked nickserv to protect me!', 'notice')
+        self.client.reply(source, 'Nickserv guard set', 'notice')
 
     def set_auto_identify(self, source, flag):
         if flag == 'On':

@@ -1,6 +1,2 @@
 nbproject
 *.pyc
-.DS_Store
-data/acl
-data/config
-data/nickserv

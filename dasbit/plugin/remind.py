@@ -18,6 +18,7 @@ class Remind:
 
         self.config[nickname].append({
             'message': message,
+            'channel': message.target,
             'from':    source.prefix['nickname'],
             'time':    time()
         })
@@ -31,7 +32,11 @@ class Remind:
 
         nickname = message.prefix['nickname']
 
-        for reminder in self.config[nickname]:
+        for i, reminder in enumerate(self.config[nickname]):
+            # Do not send the reminder if it was set in a different channel
+            if 'channel' in reminder and message.target != reminder['channel']:
+                continue
+
             # Fallback for old reminders
             if not 'time' in reminder:
                 date = datetime.datetime.utcnow()
@@ -45,5 +50,5 @@ class Remind:
                 )
             )
 
-        del self.config[nickname]
-        self.config.save()
+            del self.config[nickname][i]
+            self.config.save()

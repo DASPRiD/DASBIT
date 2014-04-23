@@ -24,3 +24,20 @@ License
 -------
 The files in this archive are released under the new BSD license that is
 bundled with this package in the file LICENSE.
+
+Init script
+-----------
+You can set up the init script by:
+
+```bash
+$ cp init.d/dasbit /etc/init.d/dasbit
+```
+
+Then you can use the following commands to control the bot:
+
+```bash
+$ sudo service dasbit start
+$ sudo service dasbit status
+$ sudo service dasbit stop
+```
+
